@@ -50,7 +50,6 @@ export function saveMerchant(merchantData) {
 
 export function deleteMerchant(id) {
   save(KEYS.MERCHANTS, getMerchants().filter(m => m.id !== id));
-  // 同步刪除旗下所有剩食
   save(KEYS.FOOD_ITEMS, getFoodItems().filter(f => f.merchantId !== id));
 }
 
@@ -70,6 +69,9 @@ export function getAvailableFoodItems() {
 /**
  * 新增或更新剩食物品
  * @param {object} itemData — 若含 id 則更新，否則新增
+ * offerType: 'free' | 'discount'
+ * price: number | null（discount 時必填）
+ * foodCategory: string
  */
 export function saveFoodItem(itemData) {
   const items = getFoodItems();
@@ -101,7 +103,7 @@ export function clearSession() {
 
 // ── 假資料 Seed（若 lf_merchants 為空自動執行）────────────────
 export function seedDemoData() {
-  if (getMerchants().length > 0) return; // 已有資料則跳過
+  if (getMerchants().length > 0) return;
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -110,9 +112,8 @@ export function seedDemoData() {
       id: 'm_demo_01',
       name: '老王麵包坊',
       address: '高雄市前金區中正四路 56 號',
-      lat: 22.6273, lng: 120.3014,
       phone: '07-2212345',
-      category: '麵包甜點',
+      category: '麵包店',
       username: 'wangbakery',
       passwordHash: btoa('demo1234'),
     },
@@ -120,39 +121,35 @@ export function seedDemoData() {
       id: 'm_demo_02',
       name: '阿嬤自助餐',
       address: '高雄市前金區七賢二路 88 號',
-      lat: 22.6301, lng: 120.2998,
       phone: '07-2219876',
-      category: '便當熟食',
+      category: '自助餐',
       username: 'grannyfood',
       passwordHash: btoa('demo1234'),
     },
     {
       id: 'm_demo_03',
-      name: '前金水果行',
+      name: '前金生鮮超市',
       address: '高雄市前金區成功一路 210 號',
-      lat: 22.6258, lng: 120.3031,
       phone: '07-2210001',
-      category: '蔬果',
+      category: '生鮮超市',
       username: 'fruitshop',
       passwordHash: btoa('demo1234'),
     },
     {
       id: 'm_demo_04',
-      name: '幸福豆漿店',
+      name: '幸福便利商店',
       address: '高雄市前金區市中一路 34 號',
-      lat: 22.6289, lng: 120.2977,
       phone: '07-2213344',
-      category: '麵包甜點',
+      category: '便利商店',
       username: 'happysoy',
       passwordHash: btoa('demo1234'),
     },
     {
       id: 'm_demo_05',
-      name: '金城便當',
+      name: '金城咖啡',
       address: '高雄市前金區金城路 112 號',
-      lat: 22.6245, lng: 120.3008,
       phone: '07-2215566',
-      category: '便當熟食',
+      category: '咖啡飲品',
       username: 'jinchengbox',
       passwordHash: btoa('demo1234'),
     },
@@ -160,20 +157,20 @@ export function seedDemoData() {
 
   const foodItems = [
     // 老王麵包坊
-    { id: 'fi_d01', merchantId: 'm_demo_01', name: '法國麵包', quantity: 4, unit: '條', pickupStart: '17:00', pickupEnd: '19:00', date: today, status: 'available' },
-    { id: 'fi_d02', merchantId: 'm_demo_01', name: '奶油餐包', quantity: 8, unit: '個', pickupStart: '17:30', pickupEnd: '19:00', date: today, status: 'available' },
+    { id: 'fi_d01', merchantId: 'm_demo_01', name: '法國麵包', quantity: 4, unit: '條', pickupStart: '17:00', pickupEnd: '19:00', date: today, status: 'available', offerType: 'free',     price: null, foodCategory: '麵包' },
+    { id: 'fi_d02', merchantId: 'm_demo_01', name: '奶油餐包', quantity: 8, unit: '個', pickupStart: '17:30', pickupEnd: '19:00', date: today, status: 'available', offerType: 'discount', price: 15,   foodCategory: '麵包' },
     // 阿嬤自助餐
-    { id: 'fi_d03', merchantId: 'm_demo_02', name: '控肉飯', quantity: 3, unit: '份', pickupStart: '18:00', pickupEnd: '19:30', date: today, status: 'available' },
-    { id: 'fi_d04', merchantId: 'm_demo_02', name: '炒青菜', quantity: 2, unit: '份', pickupStart: '18:00', pickupEnd: '19:30', date: today, status: 'available' },
-    // 前金水果行
-    { id: 'fi_d05', merchantId: 'm_demo_03', name: '香蕉（熟透）', quantity: 1, unit: '串', pickupStart: '16:30', pickupEnd: '18:30', date: today, status: 'available' },
-    { id: 'fi_d06', merchantId: 'm_demo_03', name: '木瓜', quantity: 2, unit: '個', pickupStart: '16:30', pickupEnd: '18:30', date: today, status: 'available' },
-    // 幸福豆漿店
-    { id: 'fi_d07', merchantId: 'm_demo_04', name: '無糖豆漿', quantity: 5, unit: '杯', pickupStart: '17:00', pickupEnd: '18:30', date: today, status: 'available' },
-    { id: 'fi_d08', merchantId: 'm_demo_04', name: '蘿蔔糕', quantity: 3, unit: '片', pickupStart: '17:00', pickupEnd: '18:30', date: today, status: 'available' },
-    // 金城便當
-    { id: 'fi_d09', merchantId: 'm_demo_05', name: '排骨便當', quantity: 2, unit: '盒', pickupStart: '18:30', pickupEnd: '20:00', date: today, status: 'available' },
-    { id: 'fi_d10', merchantId: 'm_demo_05', name: '雞腿便當', quantity: 1, unit: '盒', pickupStart: '18:30', pickupEnd: '20:00', date: today, status: 'available' },
+    { id: 'fi_d03', merchantId: 'm_demo_02', name: '控肉飯',   quantity: 3, unit: '份', pickupStart: '18:00', pickupEnd: '19:30', date: today, status: 'available', offerType: 'free',     price: null, foodCategory: '熟食' },
+    { id: 'fi_d04', merchantId: 'm_demo_02', name: '炒青菜',   quantity: 2, unit: '份', pickupStart: '18:00', pickupEnd: '19:30', date: today, status: 'available', offerType: 'discount', price: 20,   foodCategory: '蔬菜' },
+    // 前金生鮮超市
+    { id: 'fi_d05', merchantId: 'm_demo_03', name: '香蕉（熟透）', quantity: 3, unit: '串', pickupStart: '16:30', pickupEnd: '18:30', date: today, status: 'available', offerType: 'discount', price: 30, foodCategory: '水果' },
+    { id: 'fi_d06', merchantId: 'm_demo_03', name: '木瓜',     quantity: 2, unit: '個', pickupStart: '16:30', pickupEnd: '18:30', date: today, status: 'available', offerType: 'discount', price: 25,   foodCategory: '水果' },
+    // 幸福便利商店
+    { id: 'fi_d07', merchantId: 'm_demo_04', name: '關東煮',   quantity: 5, unit: '份', pickupStart: '21:00', pickupEnd: '23:00', date: today, status: 'available', offerType: 'discount', price: 39,   foodCategory: '熟食' },
+    { id: 'fi_d08', merchantId: 'm_demo_04', name: '到期御飯糰', quantity: 3, unit: '個', pickupStart: '22:00', pickupEnd: '23:30', date: today, status: 'available', offerType: 'free',   price: null, foodCategory: '熟食' },
+    // 金城咖啡
+    { id: 'fi_d09', merchantId: 'm_demo_05', name: '拿鐵（大杯）', quantity: 2, unit: '杯', pickupStart: '18:30', pickupEnd: '20:00', date: today, status: 'available', offerType: 'discount', price: 60, foodCategory: '飲品' },
+    { id: 'fi_d10', merchantId: 'm_demo_05', name: '起司蛋糕', quantity: 1, unit: '片', pickupStart: '18:30', pickupEnd: '20:00', date: today, status: 'available', offerType: 'discount', price: 45,   foodCategory: '甜點' },
   ];
 
   save(KEYS.MERCHANTS, merchants);

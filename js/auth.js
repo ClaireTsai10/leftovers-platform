@@ -24,7 +24,7 @@ export function login(username, password) {
 }
 
 /**
- * @param {object} data — { name, address, lat, lng, phone, category, username, password }
+ * @param {object} data — { name, address, phone, category, username, password }
  */
 export function register(data) {
   const merchants = getMerchants();
@@ -34,8 +34,6 @@ export function register(data) {
   const newMerchant = {
     name:         data.name,
     address:      data.address,
-    lat:          parseFloat(data.lat) || null,
-    lng:          parseFloat(data.lng) || null,
     phone:        data.phone,
     category:     data.category,
     username:     data.username,
@@ -84,7 +82,7 @@ export function initAuthView() {
           登入
         </button>
         <p class="text-xs text-stone-400 text-center">
-          Demo 帳號：wangbakery / grannyfood / fruitshop（密碼均為 demo1234）
+          Demo 帳號：wangbakery / grannyfood / happysoy（密碼均為 demo1234）
         </p>
       </form>
 
@@ -103,27 +101,23 @@ export function initAuthView() {
               class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
           </div>
           <div>
-            <label class="block text-sm text-stone-600 mb-1">緯度（lat）</label>
-            <input id="reg-lat" type="number" step="any" placeholder="22.627"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-sm text-stone-600 mb-1">經度（lng）</label>
-            <input id="reg-lng" type="number" step="any" placeholder="120.301"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
-          </div>
-          <div>
             <label class="block text-sm text-stone-600 mb-1">電話</label>
             <input id="reg-phone" type="tel" placeholder="07-XXXXXXX"
               class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
           </div>
           <div>
-            <label class="block text-sm text-stone-600 mb-1">類別</label>
+            <label class="block text-sm text-stone-600 mb-1">商家類別 <span class="text-red-400">*</span></label>
             <select id="reg-category"
               class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm bg-white">
-              <option value="麵包甜點">麵包甜點</option>
-              <option value="便當熟食">便當熟食</option>
-              <option value="蔬果">蔬果</option>
+              <option value="麵包店">麵包店</option>
+              <option value="自助餐">自助餐</option>
+              <option value="生鮮超市">生鮮超市</option>
+              <option value="便利商店">便利商店</option>
+              <option value="咖啡飲品">咖啡飲品</option>
+              <option value="日式料理">日式料理</option>
+              <option value="中式餐廳">中式餐廳</option>
+              <option value="西式餐廳">西式餐廳</option>
+              <option value="小吃攤">小吃攤</option>
               <option value="其他">其他</option>
             </select>
           </div>
@@ -209,8 +203,6 @@ function bindAuthEvents() {
     const data = {
       name:     document.getElementById('reg-name').value.trim(),
       address:  document.getElementById('reg-address').value.trim(),
-      lat:      document.getElementById('reg-lat').value,
-      lng:      document.getElementById('reg-lng').value,
       phone:    document.getElementById('reg-phone').value.trim(),
       category: document.getElementById('reg-category').value,
       username: document.getElementById('reg-username').value.trim(),
