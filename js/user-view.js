@@ -1,10 +1,11 @@
 /**
  * user-view.js — 使用者瀏覽介面
- * 卡片列表 + 進階篩選（免費/打折、商家類別、食物類別、價格上限）
- * v2：移除地圖，改為純卡片列表搭配進階篩選
+ * 地圖在上 + 進階篩選 + 卡片列表在下
+ * 點擊卡片 flyTo 對應商家 Marker
  */
 
 import { getMerchants, getAvailableFoodItems } from './storage.js';
+import { initMap, renderMarkers, flyToMerchant } from './map.js';
 
 const MERCHANT_CATS = ['全部', '麵包店', '自助餐', '生鮮超市', '便利商店', '咖啡飲品', '日式料理', '中式餐廳', '西式餐廳', '小吃攤', '其他'];
 const FOOD_CATS     = ['全部', '麵包', '熟食', '蔬菜', '水果', '飲品', '甜點', '其他'];
@@ -31,6 +32,9 @@ export function initUserView() {
         </h1>
         <p class="text-sm text-stone-400 mt-1">高雄市前金區・免費剩食 ＆ 打折惜食</p>
       </div>
+
+      <!-- 地圖 -->
+      <div id="map" class="rounded-xl overflow-hidden border border-stone-200 shadow-sm"></div>
 
       <!-- 搜尋列 -->
       <div class="relative">
@@ -104,14 +108,19 @@ export function initUserView() {
     </div>
   `;
 
-  refreshUserView();
-  bindUserViewEvents();
+  // 延遲初始化地圖，確保 #map 容器已渲染
+  setTimeout(() => {
+    initMap('map');
+    refreshUserView();
+    bindUserViewEvents();
+  }, 50);
 }
 
-// ── 重新整理卡片 ─────────────────────────────────────────────────
+// ── 重新整理地圖 + 卡片 ──────────────────────────────────────────
 export function refreshUserView() {
   const allMerchants = getMerchants();
   const allItems     = getAvailableFoodItems();
+  renderMarkers(allMerchants, allItems);
   renderCards(allMerchants, allItems);
 }
 
@@ -181,9 +190,11 @@ function renderCards(merchants, foodItems) {
       ? `<span class="text-lg font-bold text-emerald-500">免費</span>`
       : `<span class="text-lg font-bold text-blue-500">$${item.price}</span>
          <span class="text-xs text-stone-400 ml-1">/ ${escHtml(item.unit)}</span>`;
+    const hasCoords = merchant.lat && merchant.lng;
 
     return `
-    <div class="food-card bg-white border border-stone-200 rounded-2xl p-4 cursor-default">
+    <div class="food-card bg-white border border-stone-200 rounded-2xl p-4 ${hasCoords ? 'cursor-pointer' : 'cursor-default'}"
+      data-merchant-id="${merchant.id}">
       <div class="flex items-start justify-between gap-2 mb-2">
         <div class="flex flex-wrap gap-1">
           <span class="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-600">${escHtml(merchant.category)}</span>
@@ -201,10 +212,24 @@ function renderCards(merchants, foodItems) {
       </div>
       <div class="mt-3 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-400">
         <span>🕐 ${item.pickupStart} – ${item.pickupEnd}</span>
-        <span>📍 ${escHtml(merchant.address.length > 12 ? merchant.address.slice(0, 12) + '…' : merchant.address)}</span>
+        <span>${hasCoords ? '📍 查看地圖' : '📍 ' + escHtml(merchant.address.length > 12 ? merchant.address.slice(0, 12) + '…' : merchant.address)}</span>
       </div>
     </div>
   `}).join('');
+
+  // 點擊有座標的卡片 → flyTo + highlight
+  listEl.querySelectorAll('.food-card[data-merchant-id]').forEach(card => {
+    const merchantId = card.dataset.merchantId;
+    const m = cards.find(c => c.merchant.id === merchantId)?.merchant;
+    if (!m?.lat || !m?.lng) return;
+    card.addEventListener('click', () => {
+      listEl.querySelectorAll('.food-card').forEach(c => c.classList.remove('highlighted'));
+      card.classList.add('highlighted');
+      flyToMerchant(merchantId);
+      // 讓頁面捲回地圖位置
+      document.getElementById('map')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 }
 
 // ── 事件綁定 ─────────────────────────────────────────────────────

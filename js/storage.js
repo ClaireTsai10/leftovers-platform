@@ -116,6 +116,7 @@ export function seedDemoData() {
       category: '麵包店',
       username: 'wangbakery',
       passwordHash: btoa('demo1234'),
+      lat: 22.6299, lng: 120.3017,
     },
     {
       id: 'm_demo_02',
@@ -125,6 +126,7 @@ export function seedDemoData() {
       category: '自助餐',
       username: 'grannyfood',
       passwordHash: btoa('demo1234'),
+      lat: 22.6318, lng: 120.2994,
     },
     {
       id: 'm_demo_03',
@@ -134,6 +136,7 @@ export function seedDemoData() {
       category: '生鮮超市',
       username: 'fruitshop',
       passwordHash: btoa('demo1234'),
+      lat: 22.6274, lng: 120.3038,
     },
     {
       id: 'm_demo_04',
@@ -143,6 +146,7 @@ export function seedDemoData() {
       category: '便利商店',
       username: 'happysoy',
       passwordHash: btoa('demo1234'),
+      lat: 22.6307, lng: 120.2973,
     },
     {
       id: 'm_demo_05',
@@ -152,6 +156,7 @@ export function seedDemoData() {
       category: '咖啡飲品',
       username: 'jinchengbox',
       passwordHash: btoa('demo1234'),
+      lat: 22.6256, lng: 120.3005,
     },
   ];
 
