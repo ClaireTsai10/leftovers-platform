@@ -1,0 +1,61 @@
+/* ========================================
+   自訂補充樣式（Tailwind CDN 無法覆蓋的部分）
+   ======================================== */
+
+/* Leaflet 地圖容器高度 */
+#map {
+  height: 360px;
+  width: 100%;
+  border-radius: 0.75rem;
+  z-index: 0;
+}
+
+/* 確保 Leaflet popup 在 modal 下方 */
+.leaflet-pane {
+  z-index: 1;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2;
+}
+
+/* 剩食卡片 hover 效果 */
+.food-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.food-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.food-card.highlighted {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px #fed7aa;
+}
+
+/* 類別 Tag 篩選按鈕 */
+.tag-btn {
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.tag-btn.active {
+  background-color: #f97316;
+  color: #fff;
+  border-color: #f97316;
+}
+
+/* Toast 顯示/隱藏 */
+#toast.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 表單 input focus 統一樣式 */
+.form-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px #fed7aa;
+}
+
+/* 空狀態圖示 */
+.empty-state {
+  color: #d6d3d1;
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>剩食平台 — 前金區惜食地圖</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#f97316', light: '#fed7aa', dark: '#c2410c' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-stone-50 text-stone-800 min-h-screen flex flex-col">
+
+  <!-- ===== 導覽列 ===== -->
+  <nav id="navbar" class="bg-white border-b border-stone-200 shadow-sm sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+      <button id="nav-logo" class="flex items-center gap-2 font-bold text-lg text-orange-500 hover:opacity-80 transition">
+        <span class="text-2xl">🍱</span>
+        <span>前金惜食地圖</span>
+      </button>
+      <div class="flex items-center gap-3">
+        <!-- 使用者模式時顯示：切換到商家登入 -->
+        <button id="nav-to-merchant"
+          class="text-sm text-stone-500 hover:text-orange-500 transition hidden">
+          商家登入
+        </button>
+        <!-- 商家登入後顯示：歡迎文字 + 登出 -->
+        <span id="nav-merchant-name" class="text-sm text-stone-500 hidden"></span>
+        <button id="nav-logout"
+          class="hidden text-sm px-3 py-1 rounded-full border border-stone-300 hover:border-orange-400 hover:text-orange-500 transition">
+          登出
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== View：使用者瀏覽介面（預設顯示） ===== -->
+  <section id="view-user" class="flex-1 hidden">
+    <!-- 內容由 user-view.js 渲染 -->
+  </section>
+
+  <!-- ===== View：商家認證（登入 / 註冊） ===== -->
+  <section id="view-auth" class="flex-1 hidden">
+    <!-- 內容由 auth.js 渲染 -->
+  </section>
+
+  <!-- ===== View：商家管理介面 ===== -->
+  <section id="view-merchant" class="flex-1 hidden">
+    <!-- 內容由 merchant-view.js 渲染 -->
+  </section>
+
+  <!-- ===== 全域 Modal 容器 ===== -->
+  <div id="modal-overlay"
+    class="fixed inset-0 bg-black/50 z-40 hidden flex items-center justify-center p-4">
+    <div id="modal-box"
+      class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <!-- 內容由各 view 動態注入 -->
+    </div>
+  </div>
+
+  <!-- ===== Toast 通知 ===== -->
+  <div id="toast"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-full text-white text-sm font-medium shadow-lg
+           bg-stone-800 transition-all duration-300 opacity-0 pointer-events-none">
+  </div>
+
+  <!-- ===== JS 模組（type=module，載入順序依賴） ===== -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
