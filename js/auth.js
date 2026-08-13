@@ -24,7 +24,7 @@ export function login(username, password) {
 }
 
 /**
- * @param {object} data — { name, address, phone, category, username, password, lat, lng }
+ * @param {object} data — { name, address, phone, category, username, password }
  */
 export function register(data) {
   const merchants = getMerchants();
@@ -38,8 +38,6 @@ export function register(data) {
     category:     data.category,
     username:     data.username,
     passwordHash: hashPassword(data.password),
-    lat:          parseFloat(data.lat) || null,
-    lng:          parseFloat(data.lng) || null,
   };
   const saved = saveMerchant(newMerchant);
   setSession({ merchantId: saved.id, username: saved.username });
@@ -122,16 +120,6 @@ export function initAuthView() {
               <option value="小吃攤">小吃攤</option>
               <option value="其他">其他</option>
             </select>
-          </div>
-          <div>
-            <label class="block text-sm text-stone-600 mb-1">緯度（Latitude）</label>
-            <input id="reg-lat" type="number" step="any" placeholder="22.627"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-sm text-stone-600 mb-1">經度（Longitude）</label>
-            <input id="reg-lng" type="number" step="any" placeholder="120.301"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
           </div>
           <div>
             <label class="block text-sm text-stone-600 mb-1">帳號 <span class="text-red-400">*</span></label>
@@ -217,8 +205,6 @@ function bindAuthEvents() {
       address:  document.getElementById('reg-address').value.trim(),
       phone:    document.getElementById('reg-phone').value.trim(),
       category: document.getElementById('reg-category').value,
-      lat:      document.getElementById('reg-lat').value,
-      lng:      document.getElementById('reg-lng').value,
       username: document.getElementById('reg-username').value.trim(),
       password,
     };

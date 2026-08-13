@@ -73,9 +73,6 @@ export function renderMerchantView() {
       </div>
       <p class="text-sm text-stone-500">📍 ${escHtml(merchant.address)}</p>
       ${merchant.phone ? `<p class="text-sm text-stone-500">📞 ${escHtml(merchant.phone)}</p>` : ''}
-      ${merchant.lat && merchant.lng
-        ? `<p class="text-xs text-stone-400 mt-1">座標：${merchant.lat}, ${merchant.lng}</p>`
-        : `<p class="text-xs text-stone-400 mt-1">座標未設定（地圖不顯示標記）</p>`}
     `;
   }
 
@@ -400,20 +397,7 @@ function openMerchantEditModal(merchant) {
               ${catOptions}
             </select>
           </div>
-          <div>
-            <label class="block text-sm text-stone-600 mb-1">緯度（Latitude）</label>
-            <input id="mch-lat" type="number" step="any" placeholder="22.627"
-              value="${merchant.lat ?? ''}"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-sm text-stone-600 mb-1">經度（Longitude）</label>
-            <input id="mch-lng" type="number" step="any" placeholder="120.301"
-              value="${merchant.lng ?? ''}"
-              class="form-input w-full border border-stone-300 rounded-lg px-3 py-2 text-sm" />
-          </div>
         </div>
-
         <div class="flex gap-3 pt-2">
           <button type="button" id="modal-cancel"
             class="flex-1 py-2.5 border border-stone-300 rounded-lg text-sm hover:bg-stone-50 transition">
@@ -439,8 +423,6 @@ function openMerchantEditModal(merchant) {
       address:  document.getElementById('mch-address').value.trim(),
       phone:    document.getElementById('mch-phone').value.trim(),
       category: document.getElementById('mch-category').value,
-      lat:      parseFloat(document.getElementById('mch-lat').value) || null,
-      lng:      parseFloat(document.getElementById('mch-lng').value) || null,
     };
     saveMerchant(updated);
     closeModal();
