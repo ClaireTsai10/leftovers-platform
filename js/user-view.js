@@ -27,9 +27,9 @@ export function initUserView() {
       <!-- 標語 -->
       <div class="text-center py-4">
         <h1 class="text-2xl font-bold text-stone-800">
-          打烊前的<span class="text-orange-500">溫暖</span>，等你來帶走
+          Before it goes to waste
         </h1>
-        <p class="text-sm text-stone-400 mt-1">高雄市前金區・免費剩食 ＆ 打折惜食</p>
+        <p class="text-sm text-stone-400 mt-1">店家發佈｜民眾查找｜即時售罄</p>
       </div>
 
       <!-- 搜尋列 -->
